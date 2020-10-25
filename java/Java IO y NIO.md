@@ -361,16 +361,60 @@ Antes de que un programa pueda utilizar la consola, debe intentar recuperar el o
 El objeto de la consola admite la entrada de contraseña segura a través de su `readPassword`método. Este método ayuda a proteger la entrada de la contraseña de dos formas. Primero, suprime el eco, por lo que la contraseña no es visible en la pantalla del usuario. En segundo lugar, `readPassword`devuelve una matriz de caracteres, no a `String`, por lo que la contraseña se puede sobrescribir, eliminándola de la memoria tan pronto como ya no se necesite.
 
 El [`Password`](https://docs.oracle.com/javase/tutorial/essential/io/examples/Password.java)ejemplo es un programa prototipo para cambiar la contraseña de un usuario. Demuestra varios `Console`métodos.
+```java
+import java.io.Console;
+import java.util.Arrays;
+import java.io.IOException;
 
-importar java.io.Console; import java.util.Arrays; import java.io.IOException;
- contraseña de clase pública {
-     public static void main (String args []) lanza IOException {
- Consola c = System.console (); si (c == nulo) { System.err.println ("Sin consola"); System.exit (1); }
- String login = c.readLine ("Ingrese su nombre de usuario:"); char [] oldPassword = c.readPassword ("Ingrese su contraseña anterior:");
- si (verificar (inicio de sesión, contraseña antigua)) { boolean noMatch; hacer { char [] newPassword1 = c.readPassword ("Ingrese su nueva contraseña:"); char [] newPassword2 = c.readPassword ("Ingrese la nueva contraseña nuevamente:"); noMatch =! Arrays.equals (newPassword1, newPassword2); if (noMatch) { c.format ("Las contraseñas no coinciden. Vuelve a intentarlo.% n"); } más { cambiar (iniciar sesión, nueva contraseña1); c.format ("Contraseña de% s cambiada.% n", inicio de sesión); } Arrays.fill (newPassword1, ''); Arrays.fill (newPassword2, ''); } while (noMatch); }
- Arrays.fill (contraseña antigua, ''); }
-     // Método de cambio ficticio. verificación booleana estática (cadena de inicio de sesión, char [] contraseña) { // Este método siempre devuelve // verdadero en este ejemplo. // Modifica este método para verificar // contraseña de acuerdo con sus reglas. devuelve verdadero; }
- // Método de cambio ficticio. cambio de vacío estático (cadena de inicio de sesión, char [] contraseña) { // Modifica este método para cambiar // contraseña de acuerdo con sus reglas. } }
+public class Password {
+    
+    public static void main (String args[]) throws IOException {
+
+        Console c = System.console();
+        if (c == null) {
+            System.err.println("No console.");
+            System.exit(1);
+        }
+
+        String login = c.readLine("Enter your login: ");
+        char [] oldPassword = c.readPassword("Enter your old password: ");
+
+        if (verify(login, oldPassword)) {
+            boolean noMatch;
+            do {
+                char [] newPassword1 = c.readPassword("Enter your new password: ");
+                char [] newPassword2 = c.readPassword("Enter new password again: ");
+                noMatch = ! Arrays.equals(newPassword1, newPassword2);
+                if (noMatch) {
+                    c.format("Passwords don't match. Try again.%n");
+                } else {
+                    change(login, newPassword1);
+                    c.format("Password for %s changed.%n", login);
+                }
+                Arrays.fill(newPassword1, ' ');
+                Arrays.fill(newPassword2, ' ');
+            } while (noMatch);
+        }
+
+        Arrays.fill(oldPassword, ' ');
+    }
+    
+    // Dummy change method.
+    static boolean verify(String login, char[] password) {
+        // This method always returns
+        // true in this example.
+        // Modify this method to verify
+        // password according to your rules.
+        return true;
+    }
+
+    // Dummy change method.
+    static void change(String login, char[] password) {
+        // Modify this method to change
+        // password according to your rules.
+    }
+}
+```
 
 La `Password`clase sigue estos pasos:
 
